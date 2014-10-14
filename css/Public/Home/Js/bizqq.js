@@ -1,0 +1,1 @@
+document.write('<a target="blank" href="http://wpa.qq.com/msgrd?v=3&uin=260667226&site=qq&menu=yes"><img border="0" alt="" src="http://wpa.qq.com/pa?p=1:260667226:41" /></a>');

@@ -80,7 +80,7 @@ catch (err) {
 
 			<div class="sub-content">
 
-				<form id="form1" name="form1" method="post" action="/module/user/passworddo.php" onsubmit="return checkDo()">
+				<form id="form1" name="form1" method="post" action="/users/user/passworddo" onsubmit="return checkDo()">
 				<table width="670" border="0" align="center" cellpadding="5" cellspacing="0">
 				<tr>
 				<td width="95" align="right">原始密码：</td>

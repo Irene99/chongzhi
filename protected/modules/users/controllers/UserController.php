@@ -28,4 +28,24 @@ class UserController extends Controller
 		$this->renderPartial('password');
 	}
 
+	public function actionPassworddo()
+	{
+		$this->renderPartial('passworddo');
+	}
+
+	public function actionProfiledo()
+	{
+		$this->renderPartial('profiledo');
+	}
+
+	public function actionLogout()
+	{
+		$this->renderPartial('logout');
+	}
+
+	public function actionRegister()
+	{
+		$this->renderPartial('register');
+	}
+
 }

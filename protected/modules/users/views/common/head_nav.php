@@ -20,16 +20,16 @@
                     <div class="menu">
                         <ul>
                             <li class="cur">
-                                <a href="/">网站首页</a>
+                                <a href="/users/default/index">网站首页</a>
                             </li>
                             <li class="">
-                                <a href="/game/">游戏大厅</a>
+                                <a href="/users/game/index/">游戏大厅</a>
                             </li>
                             <li class="">
                                 <a href="/users/user/index">用户中心</a>
                             </li>
                             <li class="">
-                                <a href="/pay/">充值中心</a>
+                                <a href="/users/pay/index">充值中心</a>
                             </li>
                             <!--
                             <li class="">

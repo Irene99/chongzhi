@@ -19,6 +19,7 @@ if( $current_user != '')
 else{
 	//说明没登录
 	header("Location: /users/default/index");
+	die();
 }
 ?>
 <!DOCTYPE html Public/Home "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -78,8 +79,8 @@ catch (err) {
 	<li class="icon_1"><a href="/users/user/index" class="chosen">我的资料</a></li>
 	<li class="icon_2"><a href="/users/user/profile" >修改资料</a></li>
 	<li class="icon_28"><a href="/users/user/face" >修改头像</a></li>
-	<li class="icon_7"><a href="/user/password.php" >修改密码</a></li>
-	<li class="icon_3"><a href="/user/fcm.php">防沉迷认证</a></li>
+	<li class="icon_7"><a href="/users/user/password" >修改密码</a></li>
+	<li class="icon_3"><a href="/users/user/fcm">防沉迷认证</a></li>
 	</ul>
 <!--
 	<ul>
@@ -104,7 +105,7 @@ catch (err) {
 	<div class="sub-menu">帐号信息<span>&gt;</span>我的资料</div>
 
 	<div class="sub-content">
-	<img src="/Upload/face/<?php if( $row['web_headpic'] != '') echo $row['web_headpic'];else{ echo 'default';} ?>.jpg" width="70" height="70" class="uhead" />
+	<img src="/Upload/face/<?php if( $row->web_headpic != '') echo $row['web_headpic'];else{ echo 'default';} ?>.jpg" width="70" height="70" class="uhead" />
 	<div class="info">
 	<h2><?php echo $row['username'] ; ?>，欢迎您!</h2>
 	<p><span>上次签到时间：</span><?php echo $row['last_check']; ?></p>

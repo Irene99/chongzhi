@@ -1,8 +1,7 @@
-<div id="topbar">
-            <div class="content">
+<div class="content">
                 <div class="notice">
                     <div class="left">
-                        <img src="/css/Public/Home/Images/notice.gif" style="margin-top:5px;" />
+                        <img src="/Public/Home/Images/notice.gif" style="margin-top:5px;" />
                     </div>
                     <ul id="box" class="left">
                         <li>
@@ -45,7 +44,7 @@
                             <span class="splice">
                                 |
                             </span>
-                            <a href="/users/user/register" class="topreg">
+                            <a href="/module/user/register.php" class="topreg">
                                 注册
                             </a>
                         </li>
@@ -53,11 +52,10 @@
                         }
                         else{
                         ?>
-                            <li style="width:150px;"><a href="/user/" style="font-weight:bold;font-size:14px;"><?php echo $_COOKIE['name']; ?></a>&nbsp;<span>|</span>&nbsp;<a href="/users/user/logout">退出</a></li>
+                            <li style="width:150px;"><a href="/user/" style="font-weight:bold;font-size:14px;"><?php echo $_COOKIE['name']; ?></a>&nbsp;<span>|</span>&nbsp;<a href="/module/user/logoutdo.php">退出</a></li>
                         <?php
                         }
                         ?>
                     </ul>
                 </div>
             </div>
-        </div>

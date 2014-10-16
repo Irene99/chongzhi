@@ -19,6 +19,64 @@
                 } catch(err) {};
             </script>
         <![endif]-->
+        <script>
+        $(document).ready(function(){
+            $('.btn-login').live('click',function(){
+                var username = $('#username').val();
+                var password = $('#password').val();
+                var remember = $('#remember').val();
+                checkDo();
+                $.post('/users/ajax/logindo',{"log_user":username,"log_pass":password,"remember":remember},function(result){
+                    if( $.browser.msie )
+                    {
+                        result = eval('('+result+')');
+                    }
+                    else{
+                        result = JSON.parse(result);
+                    }
+
+                    var mark = result.mark ;
+                    var message = result.message ;
+
+                    if( mark == 1 )
+                    {
+                        //var dir = "<?php echo dirname(dirname(__FILE__)); ?>";
+                        var dir = "/protected/modules/users/views";
+                        $('#login_div').load(dir+'/ajaxhtml/logined.php',{});
+                        $('#topbar').load(dir+'/ajaxhtml/topbar_content.php');                
+                    }
+                    else{
+                        alert('用户名或密码输入有误,请重试');
+                    }
+
+                })
+            })
+
+            $('.btn').live('click',function(){
+                var action = 'logout';
+                $.post('/users/ajax/logoutdo',{"action":action},function(result){
+                    if( $.browser.msie )
+                    {
+                        result = eval('('+result+')');
+                    }
+                    else{
+                        result = JSON.parse(result);
+                    }
+
+                    var mark = result.mark ;
+                    var message = result.message ;
+
+                    if( mark == 1)
+                    {
+                        var dir = "/protected/modules/users/views/";
+                        $('#login_div').load(dir+'/ajaxhtml/logouted.php');
+                        $('#topbar').load(dir+'/ajaxhtml/topbar_content.php');
+                    }
+
+                });
+            })
+        })
+        </script>
     </head>
     
     <body>
@@ -54,7 +112,7 @@
                     <div class="main-left">
                         <!-- 会员登录 -->
                         <div class="box box-top home-top-hidden">
-                            <form id="form1" name="form1" method="post" action="/users/default/login">
+                            <form id="form1" name="form1" method="post" action="">
                                 <div class="content home-login" id='login_div'>
                                     <?php
                                     	if( !isset($_COOKIE['name']) )
@@ -62,13 +120,12 @@
                                     ?>
                                     <ul>
                                         <li>
-                                            <input type="text" name="username" id="username" class="text" maxlength="30" value="用户名" />
+                                            <input type="text" name="username" id="username" class="text" maxlength="30" placeholder="用户名" />
                                         </li>
                                         <li>
-                                            <input type="text" name="txtpwd" id="txtpwd" class="text" maxlength="20"
-                                            value="密码" />
-                                            <input type="password" name="password" id="password" class="text" maxlength="20"
-                                            style="display:none;" />
+                                            <!--<input type="text" name="txtpwd" id="txtpwd" class="text" maxlength="20"
+                                            value="密码" />-->
+                                            <input type="password" name="password" id="password" class="text" maxlength="20" placeholder="密码"/>
                                         </li>
                                         <li>
                                             <input type="checkbox" id="remember" name="remember" value="1" />
@@ -76,12 +133,12 @@
                                             <span>
                                                 |
                                             </span>
-                                            <a href="/module/user/register.php" class="btn-register">
+                                            <a href="/users/user/register" class="btn-register">
                                                 立即注册
                                             </a>
                                         </li>
                                         <li class="btn-list">
-                                            <input type="submit" value=" " class="btn-login" />
+                                            <input type="button" value=" " class="btn-login" />
                                         </li>
                                     </ul>
                                     <?php
@@ -118,7 +175,7 @@
 												<td width="35%" valign="top"><img src="/Upload/face/<?php echo $web_headpic; ?>.jpg" width="60" height="60" class="uhead"></td>
 												<td width="65%" valign="top">
 												<strong class="font_14"><?php if(isset($_COOKIE['name'])) echo $_COOKIE['name']; ?></strong>
-																<div class="mtop"><a href="/user/" class="btn">个人中心</a> <a href="/pay/" class="btn">充值</a> <a href="/module/user/logoutdo.php" class="btn">退出</a> </div>                
+																<div class="mtop"><a href="/users/user/index" class="btn">个人中心</a> <a href="/pay/" class="btn">充值</a> <a href="javascript:void();" class="btn">退出</a> </div>                
 								                 <div style="clear:both;"><strong style="font-family:Arial, Helvetica, sans-serif;font-size:25px;color:#069">30</strong>&nbsp;&nbsp;积分</div>
 								                </td>
 												</tr>
@@ -167,403 +224,7 @@
                             </div>
                         </div>
                         <!-- 最新开服 -->
-                        <!--
-                        <div class="box mtop">
-                            <div class="switch">
-                                <span onmouseover="javascript:showhide(1,2,'new');" class="first on" id="new-1">
-                                    最新开服
-                                </span>
-                                <span onmouseover="javascript:showhide(2,2,'new');" id="new-2">
-                                    新服推荐
-                                </span>
-                            </div>
-                            <div class="new-play" id="new-content-1">
-                                <div class="today">
-                                    今天是：2014年9月28日 星期日
-                                </div>
-                                <dl>
-                                    <dt>
-                                        <ul>
-                                            <li class="one">
-                                                日期
-                                            </li>
-                                            <li class="two">
-                                                时间
-                                            </li>
-                                            <li class="three">
-                                                游戏名称
-                                            </li>
-                                            <li class="four">
-                                                服数
-                                            </li>
-                                        </ul>
-                                        <div class="clear">
-                                        </div>
-                                    </dt>
-                                    <dd style="background:#FFFF99">
-                                        <ul>
-                                            <li class="one" style="color:red;font-weight:bold;">
-                                                09-28
-                                            </li>
-                                            <li class="two" style="color:red;font-weight:bold;">
-                                                23:00
-                                            </li>
-                                            <li class="three">
-                                                <a href="#" target="_blank" style="color:red;font-weight:bold;">
-                                                    七杀
-                                                </a>
-                                                <img src="Public/Home/Images/today.gif" />
-                                            </li>
-                                            <li class="four">
-                                                <a href="javascript:alert('双线164服 09月28日 23:00 即将开启！');" style="color:red;font-weight:bold;">
-                                                    164服
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="clear">
-                                        </div>
-                                    </dd>
-                                    <dd class="n" style="background:#FFFF99">
-                                        <ul>
-                                            <li class="one" style="color:red;font-weight:bold;">
-                                                09-28
-                                            </li>
-                                            <li class="two" style="color:red;font-weight:bold;">
-                                                22:00
-                                            </li>
-                                            <li class="three">
-                                                <a href="#" target="_blank" style="color:red;font-weight:bold;">
-                                                    武易
-                                                </a>
-                                                <img src="Public/Home/Images/today.gif" />
-                                            </li>
-                                            <li class="four">
-                                                <a href="javascript:alert('双线304服 09月28日 22:00 即将开启！');" style="color:red;font-weight:bold;">
-                                                    304服
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="clear">
-                                        </div>
-                                    </dd>
-                                    <dd style="background:#FFFF99">
-                                        <ul>
-                                            <li class="one" style="color:red;font-weight:bold;">
-                                                09-28
-                                            </li>
-                                            <li class="two" style="color:red;font-weight:bold;">
-                                                21:00
-                                            </li>
-                                            <li class="three">
-                                                <a href="#" target="_blank" style="color:red;font-weight:bold;">
-                                                    烈火战神
-                                                </a>
-                                                <img src="Public/Home/Images/today.gif" />
-                                            </li>
-                                            <li class="four">
-                                                <a href="javascript:alert('双线323服 09月28日 21:00 即将开启！');" style="color:red;font-weight:bold;">
-                                                    323服
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="clear">
-                                        </div>
-                                    </dd>
-                                    <dd class="n" style="background:#FFFF99">
-                                        <ul>
-                                            <li class="one" style="color:red;font-weight:bold;">
-                                                09-28
-                                            </li>
-                                            <li class="two" style="color:red;font-weight:bold;">
-                                                21:00
-                                            </li>
-                                            <li class="three">
-                                                <a href="#" target="_blank" style="color:red;font-weight:bold;">
-                                                    魅影传说
-                                                </a>
-                                                <img src="Public/Home/Images/today.gif" />
-                                            </li>
-                                            <li class="four">
-                                                <a href="javascript:alert('双线3服 09月28日 21:00 即将开启！');" style="color:red;font-weight:bold;">
-                                                    3服
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="clear">
-                                        </div>
-                                    </dd>
-                                    <dd style="background:#FFFF99">
-                                        <ul>
-                                            <li class="one" style="color:red;font-weight:bold;">
-                                                09-28
-                                            </li>
-                                            <li class="two" style="color:red;font-weight:bold;">
-                                                20:00
-                                            </li>
-                                            <li class="three">
-                                                <a href="#" target="_blank" style="color:red;font-weight:bold;">
-                                                    黑暗之光
-                                                </a>
-                                                <img src="Public/Home/Images/today.gif" />
-                                            </li>
-                                            <li class="four">
-                                                <a href="javascript:alert('双线12服 09月28日 20:00 即将开启！');" style="color:red;font-weight:bold;">
-                                                    12服
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="clear">
-                                        </div>
-                                    </dd>
-                                    <dd class="n" style="background:#FFFF99">
-                                        <ul>
-                                            <li class="one" style="color:red;font-weight:bold;">
-                                                09-28
-                                            </li>
-                                            <li class="two" style="color:red;font-weight:bold;">
-                                                20:00
-                                            </li>
-                                            <li class="three">
-                                                <a href="#" target="_blank" style="color:red;font-weight:bold;">
-                                                    热血三国2
-                                                </a>
-                                                <img src="Public/Home/Images/today.gif" />
-                                            </li>
-                                            <li class="four">
-                                                <a href="javascript:alert('双线151服 收复失地 09月28日 20:00 即将开启！');" style="color:red;font-weight:bold;">
-                                                    151服
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="clear">
-                                        </div>
-                                    </dd>
-                                    <dd style="background:#FFFF99">
-                                        <ul>
-                                            <li class="one">
-                                                09-28
-                                            </li>
-                                            <li class="two">
-                                                16:00
-                                            </li>
-                                            <li class="three">
-                                                <a href="#" target="_blank">
-                                                    热血海贼王
-                                                </a>
-                                                <img src="Public/Home/Images/today.gif" />
-                                            </li>
-                                            <li class="four">
-                                                <a href="#" target="_blank">
-                                                    63服
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="clear">
-                                        </div>
-                                    </dd>
-                                    <dd class="n" style="background:#FFFF99">
-                                        <ul>
-                                            <li class="one">
-                                                09-28
-                                            </li>
-                                            <li class="two">
-                                                15:00
-                                            </li>
-                                            <li class="three">
-                                                <a href="#" target="_blank">
-                                                    火影疾风坛
-                                                </a>
-                                                <img src="Public/Home/Images/today.gif" />
-                                            </li>
-                                            <li class="four">
-                                                <a href="#" target="_blank">
-                                                    76服
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="clear">
-                                        </div>
-                                    </dd>
-                                    <dd style="background:#FFFF99">
-                                        <ul>
-                                            <li class="one">
-                                                09-28
-                                            </li>
-                                            <li class="two">
-                                                10:00
-                                            </li>
-                                            <li class="three">
-                                                <a href="#" target="_blank">
-                                                    三国魂
-                                                </a>
-                                                <img src="Public/Home/Images/today.gif" />
-                                            </li>
-                                            <li class="four">
-                                                <a href="#" target="_blank">
-                                                    54服
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="clear">
-                                        </div>
-                                    </dd>
-                                    <dd class="n">
-                                        <ul>
-                                            <li class="one">
-                                                09-27
-                                            </li>
-                                            <li class="two">
-                                                23:00
-                                            </li>
-                                            <li class="three">
-                                                <a href="#" target="_blank">
-                                                    七杀
-                                                </a>
-                                            </li>
-                                            <li class="four">
-                                                <a href="#" target="_blank">
-                                                    163服
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="clear">
-                                        </div>
-                                    </dd>
-                                </dl>
-                            </div>
-                            <div class="content game-right-hot" id="new-content-2" style="display:none">
-                                <dl class="first">
-                                    <dt>
-                                        <a href="#">
-                                            <img src="/Upload/game/sjtl.jpg" alt="神将屠龙" width="110" height="68" />
-                                        </a>
-                                    </dt>
-                                    <dt>
-                                        <ul>
-                                            <li class="one">
-                                                <a href="#">
-                                                    神将屠龙
-                                                </a>
-                                            </li>
-                                            <li>
-                                            </li>
-                                            <li>
-                                                <a href="" target="_blank" class="game-in">
-                                                    进入游戏
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </dt>
-                                </dl>
-                                <div class="clear">
-                                </div>
-                                <dl>
-                                    <dt>
-                                        <a href="#">
-                                            <img src="/Upload/game/mycs.jpg" alt="魅影传说" width="110" height="68" />
-                                        </a>
-                                    </dt>
-                                    <dt>
-                                        <ul>
-                                            <li class="one">
-                                                <a href="#">
-                                                    魅影传说
-                                                </a>
-                                            </li>
-                                            <li>
-                                                双线2服
-                                            </li>
-                                            <li>
-                                                <a href="#" target="_blank" class="game-in">
-                                                    进入游戏
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </dt>
-                                </dl>
-                                <div class="clear">
-                                </div>
-                                <dl>
-                                    <dt>
-                                        <a href="#">
-                                            <img src="/Upload/game/hazg.jpg" alt="黑暗之光" width="110" height="68" />
-                                        </a>
-                                    </dt>
-                                    <dt>
-                                        <ul>
-                                            <li class="one">
-                                                <a href="#">
-                                                    黑暗之光
-                                                </a>
-                                            </li>
-                                            <li>
-                                                双线11服
-                                            </li>
-                                            <li>
-                                                <a href="#" target="_blank" class="game-in">
-                                                    进入游戏
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </dt>
-                                </dl>
-                                <div class="clear">
-                                </div>
-                                <dl>
-                                    <dt>
-                                        <a href="#">
-                                            <img src="/Upload/game/hhzq.jpg" alt="辉煌足球" width="110" height="68" />
-                                        </a>
-                                    </dt>
-                                    <dt>
-                                        <ul>
-                                            <li class="one">
-                                                <a href="#">
-                                                    辉煌足球
-                                                </a>
-                                            </li>
-                                            <li>
-                                                双线8服
-                                            </li>
-                                            <li>
-                                                <a href="#" target="_blank" class="game-in">
-                                                    进入游戏
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </dt>
-                                </dl>
-                                <div class="clear">
-                                </div>
-                                <dl>
-                                    <dt>
-                                        <a href="#">
-                                            <img src="/Upload/game/tgzt.jpg" alt="太古遮天2" width="110" height="68" />
-                                        </a>
-                                    </dt>
-                                    <dt>
-                                        <ul>
-                                            <li class="one">
-                                                <a href="#/">
-                                                    太古遮天2
-                                                </a>
-                                            </li>
-                                            <li>
-                                                双线14服
-                                            </li>
-                                            <li>
-                                                <a href="#" target="_blank" class="game-in">
-                                                    进入游戏
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </dt>
-                                </dl>
-                                <div class="clear">
-                                </div>
-                            </div>
-                        </div>
-                        -->
+                        
                         <div class="service box box-top mtop">
                             <img src="/css/Public/Home/Images/service.jpg" />
                             <div class="content">
@@ -1399,7 +1060,7 @@
                         }
                     }
 
-                    var txtpwd = document.getElementById("txtpwd"),
+                    /*var txtpwd = document.getElementById("txtpwd"),
                     pwd = document.getElementById("password");
                     txtpwd.onfocus = function() {
                         if (this.value != "密码") return;
@@ -1415,7 +1076,7 @@
                         txtpwd.style.display = "";
                         txtpwd.value = "密码";
                         pwd.style.color = '#999999';
-                    }
+                    }*/
                 </script>
                 <script type="text/javascript">
                     function checkDo() {
@@ -1478,22 +1139,7 @@
         </div>
         <!-- TIP START -->
         <!-- TIP END -->
-        <!-- 2014.10.08 注释
-        <div style="display:none">
-            <script language="javascript" type="text/javascript" src="http://js.users.51.la/16723167.js">
-            </script>
-            <noscript>
-                <a href="http://www.51.la/?16723167" target="_blank">
-                    <img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/16723167.asp"
-                    style="border:none" />
-                </a>
-            </noscript>
-        </div>
-        <script type="text/javascript" src="/Public/Home/Js/weixin.js?t=0623">
-        </script>
-        <script language="javascript" src="http://bbs.77313.com/actimgs/tingfengzhe.js?t=0623">
-        </script>
-        -->
+        
         <!--float right-->
         <div id="pop_float_right" style="z-index:9;right:0px;bottom:0; width:120px; height:280px; overflow:hidden;POSITION:fixed;_position:absolute; _margin-top: expression(document.documentElement.clientHeight-this.style.pixelHeight+document.documentElement.scrollTop);display:none;">
             <div style="background-color: #AB0000;font: bold 12px/20px 'arial'; height: 20px;opacity: 0.7;overflow: hidden;position: absolute;right: 0;text-align: center;top: 0; width: 40px;">
